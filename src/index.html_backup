@@ -12,6 +12,40 @@
       content="Build or customize your portfolio website using this super easy template. Free to use if you are a member of the community or a contributor to this project"
     />
 
+    <!-- Open Graph / Facebook 
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://github.com/CommunityPro/portfolio-html"
+    />
+    <meta property="og:title" content="Portfolio Template - Open source" />
+    <meta
+      property="og:description"
+      content="Build or customize your portfolio website using this super easy template. Free to use if you are a member of the community or a contributor to this project"
+    />
+    <meta
+      property="og:image"
+      content="https://user-images.githubusercontent.com/62628408/150613011-b78a7f5a-0af1-4312-aab0-0022e7258693.png"
+    /> 
+    -->
+
+    <!-- Twitter 
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content="https://github.com/CommunityPro/portfolio-html"
+    />
+    <meta property="twitter:title" content="Portfolio Template - Open source" />
+    <meta
+      property="twitter:description"
+      content="Build or customize your portfolio website using this super easy template. Free to use if you are a member of the community or a contributor to this project"
+    />
+    <meta
+      property="twitter:image"
+      content="https://user-images.githubusercontent.com/62628408/150613011-b78a7f5a-0af1-4312-aab0-0022e7258693.png"
+    />
+    -->
+
     <!-- Link -->
     <link
       rel="apple-touch-icon"
@@ -125,8 +159,8 @@
     <section id="projects" class="project-container container">
       <div class="division"></div>
       <div class="content-text">
-        <h2>DevOps Resources</h2>
-        <p>Check out some of my personal favorate DevOps/Tech resources</p>
+        <h2>Projects</h2>
+        <p>Check out some of my personal and paid projects</p>
       </div>
 
       <article class="project">
@@ -134,13 +168,13 @@
         <div href="" class="card">
           <div class="project-info">
             <div class="project-bio">
-              <h3>HackerNooN</h3>
-              <p>Read, Write, Learn</p>
+              <h3>Project One</h3>
+              <p>React, Redux, SASS</p>
             </div>
 
             <div class="project-link">
               <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-              <a href="https://hackernoon.com/" target="_blank"><i class="fas fa-globe"></i></a>
+              <a href="#" target="_blank"><i class="fas fa-globe"></i></a>
             </div>
           </div>
         </div>
@@ -149,13 +183,13 @@
         <div href="" class="card">
           <div class="project-info">
             <div class="project-bio">
-              <h3>DevOpsCube</h3>
-              <p>#</p>
+              <h3>Project Two</h3>
+              <p>React, Redux, SASS</p>
             </div>
 
             <div class="project-link">
               <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-              <a href="https://devopscube.com/" target="_blank"><i class="fas fa-globe"></i></a>
+              <a href="#" target="_blank"><i class="fas fa-globe"></i></a>
             </div>
           </div>
         </div>
@@ -164,13 +198,13 @@
         <div href="" class="card">
           <div class="project-info">
             <div class="project-bio">
-              <h3>ByteByteGo</h3>
-              <p>#</p>
+              <h3>Project Three</h3>
+              <p>React, Redux, SASS</p>
             </div>
 
             <div class="project-link">
               <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-              <a href="https://bytebytego.com/" target="_blank"><i class="fas fa-globe"></i></a>
+              <a href="#" target="_blank"><i class="fas fa-globe"></i></a>
             </div>
           </div>
         </div>
@@ -179,13 +213,13 @@
         <div href="" class="card">
           <div class="project-info">
             <div class="project-bio">
-              <h3>KodeKloud</h3>
-              <p>#</p>
+              <h3>Project Four</h3>
+              <p>React, Redux, SASS</p>
             </div>
 
             <div class="project-link">
               <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-              <a href="https://kodekloud.com/" target="_blank"><i class="fas fa-globe"></i></a>
+              <a href="#" target="_blank"><i class="fas fa-globe"></i></a>
             </div>
           </div>
         </div>
@@ -194,13 +228,13 @@
         <div href="" class="card">
           <div class="project-info">
             <div class="project-bio">
-              <h3>DZone</h3>
+              <h3>Project Five</h3>
               <p>React, Redux, SASS</p>
             </div>
 
             <div class="project-link">
               <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-              <a href="https://dzone.com/devops-and-cicd" target="_blank"><i class="fas fa-globe"></i></a>
+              <a href="#" target="_blank"><i class="fas fa-globe"></i></a>
             </div>
           </div>
         </div>
@@ -209,13 +243,13 @@
         <div href="" class="card">
           <div class="project-info">
             <div class="project-bio">
-              <h3>DevOps SubReddit</h3>
+              <h3>Project Six</h3>
               <p>React, Redux, SASS</p>
             </div>
 
             <div class="project-link">
               <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-              <a href="https://www.reddit.com/r/devops/" target="_blank"><i class="fas fa-globe"></i></a>
+              <a href="#" target="_blank"><i class="fas fa-globe"></i></a>
             </div>
           </div>
         </div>
@@ -237,6 +271,21 @@
           <a href="https://github.com/santosh-bitra" target="_blank"><img src="./assets/github-icon.svg" alt="GitHub" /></a>
           <a href="https://hub.docker.com/u/santoshbitradocker" target="_blank"><img src="./assets/iconfordockerhub-32x32.png" alt="DockerHub"/></a>
         </div>
+        <!-- Attribution 
+        <div class="attribution">
+          <a
+            href="https://github.com/CommunityPro/portfolio-html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://user-images.githubusercontent.com/62628408/157202263-9174da24-b19a-4017-9b7c-a1d26ae8f014.svg"
+              alt="attribution"
+              width="150px"
+            />
+          </a>
+        </div>
+        <p>Copyright &copy; Communitypro <span id="datee"></span>, All rights reserved</p> -->
       </div>
     </footer>
     <script src="js/script.js"></script>

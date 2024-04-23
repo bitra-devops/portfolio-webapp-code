@@ -1,0 +1,12 @@
+# .dockerignore
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+LICENSE
+Metatags.md
+node_modules
+package.json_backup
+package.json_later
+package-lock.json_later
+README.md
+REQUIREMENTS.md
+Dockerfile
