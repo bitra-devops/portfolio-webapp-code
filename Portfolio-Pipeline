@@ -1,0 +1,161 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk17'
+        maven 'maven3'
+        git 'Default-Git'
+    }
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+        PATH = "/usr/bin:$PATH"
+    }
+
+    stages {
+
+        stage('Cleanup Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+
+        stage('Git Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-bitra-devops', url: 'https://github.com/bitra-devops/portfolio-webapp-code.git']])
+            }
+        }
+
+        stage('OWASP Dependency Check') {
+            steps {
+                dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DC'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar-scanner') {
+                    sh "${SCANNER_HOME}/bin/sonar-scanner \
+                        -Dsonar.projectKey=portfolio-webapp \
+                        -Dsonar.projectName=portfolio-webapp \
+                        -Dsonar.sources=. \
+                        -Dsonar.java.binaries=."
+                }
+            }
+        }
+
+        stage('Dockerhub Login') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                        echo "Docker login successful using Jenkins credentials."
+                    }
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def tag = "santoshbitradocker/my-portfolio-landingpage:${env.BUILD_NUMBER}"
+                    def latest = "santoshbitradocker/my-portfolio-landingpage:latest"
+                    sh "docker build -t ${tag} -t ${latest} ."
+                }
+            }
+        }
+
+        stage('Trivy Image Scan') {
+            steps {
+                script {
+                    def imageTag = "santoshbitradocker/my-portfolio-landingpage:${env.BUILD_NUMBER}"
+                    sh "trivy image --exit-code 0 --severity HIGH,CRITICAL ${imageTag}"
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    def tag = "santoshbitradocker/my-portfolio-landingpage:${env.BUILD_NUMBER}"
+                    def latest = "santoshbitradocker/my-portfolio-landingpage:latest"
+                    withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                        sh "docker push ${tag}"
+                        sh "docker push ${latest}"
+                    }
+                }
+            }
+        }
+
+        stage('SSH to Lightsail & Deploy') {
+            steps {
+                script {
+                    def lightsail_ip = "65.1.50.54"
+                    def ssh_key = credentials('AWSLightSail')
+
+                    sshagent (credentials: ['AWSLightSail']) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ubuntu@${lightsail_ip} '
+                                # Pull and run the updated Docker container
+                                docker pull santoshbitradocker/my-portfolio-landingpage:latest &&
+                                docker stop portfolio-webapp || true &&
+                                docker rm portfolio-webapp || true &&
+                                docker run -d -p 8080:8080 --name portfolio-webapp santoshbitradocker/my-portfolio-landingpage:latest &&
+
+                                # Set up Nginx reverse proxy
+                                sudo tee /etc/nginx/sites-available/portfolio > /dev/null <<EOF
+server {
+    listen 80;
+    server_name bitralabs.com www.bitralabs.com;
+
+    return 301 https://\$host\$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name bitralabs.com www.bitralabs.com;
+
+    ssl_certificate /etc/letsencrypt/live/bitralabs.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/bitralabs.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host \$\$host;
+        proxy_set_header X-Real-IP \$\$remote_addr;
+        proxy_set_header X-Forwarded-For \$\$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$\$scheme;
+    }
+}
+EOF
+
+                                sudo ln -sf /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/ &&
+                                sudo nginx -t &&
+                                sudo systemctl reload nginx
+                            '
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Test Deployment') {
+            steps {
+                script {
+                    def url = "https://bitralabs.com"
+                    try {
+                        def response = httpRequest(
+                            url: url,
+                            httpMode: 'GET',
+                            timeout: 30000
+                        )
+                        echo "Successfully connected to ${url} with response: ${response.status}"
+                    } catch (Exception e) {
+                        error("Failed to connect to ${url}: ${e.message}")
+                    }
+                }
+            }
+        }
+    }
+}
