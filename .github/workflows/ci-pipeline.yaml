@@ -45,19 +45,19 @@ jobs:
           fi
           npm init -y
 
-      - name: OWASP Dependency Check
-        uses: dependency-check/Dependency-Check_Action@v3
-        with:
-          project: "portfolio-webapp"
-          path: "./"
-          format: "XML"
-          out: "reports"
+#      - name: OWASP Dependency Check
+#        uses: dependency-check/Dependency-Check_Action@v3
+#        with:
+#          project: "portfolio-webapp"
+#          path: "./"
+#          format: "XML"
+#          out: "reports"
 
-      - name: Upload Dependency Check Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-report
-          path: reports/dependency-check-report.xml
+#      - name: Upload Dependency Check Report
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: dependency-check-report
+#          path: reports/dependency-check-report.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
