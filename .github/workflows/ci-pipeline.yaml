@@ -1,0 +1,91 @@
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_IMAGE: ${{ secrets.Docker_Image }}
+#      DOCKER_IMAGE: santoshbitradocker/my-portfolio-landingpage
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4
+        with:
+          maven-version: '3.9.5'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Init NPM
+        run: |
+          rm -f package.json_backup
+          if [ -f package.json ]; then
+            cp package.json package.json_backup
+            echo "📝 Existing package.json backed up as package.json_backup"
+          fi
+          npm init -y
+
+      - name: OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@v3
+        with:
+          project: "portfolio-webapp"
+          path: "./"
+          format: "XML"
+          out: "reports"
+
+      - name: Upload Dependency Check Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports/dependency-check-report.xml
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.projectKey=bitra-devops_portfolio-webapp-code
+            -Dsonar.organization=bitra-devops
+            -Dsonar.sources=.
+            -Dsonar.java.binaries=.
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARCLOUDTOKEN }}
+
+      - name: DockerHub Login
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $DOCKER_IMAGE:${{ github.run_number }} -t $DOCKER_IMAGE:latest .
+
+      - name: Trivy Image Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.DOCKER_IMAGE }}:${{ github.run_number }}
+          format: 'table'
+          exit-code: '0'
+          severity: 'HIGH,CRITICAL'
+
+      - name: Push Docker Image
+        run: |
+          docker push $DOCKER_IMAGE:${{ github.run_number }}
+          docker push $DOCKER_IMAGE:latest

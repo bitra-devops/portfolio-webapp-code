@@ -1,3 +1,7 @@
 /vscode
 /node_modules
 /tmp
+.git
+node_modules
+reports
+*.xml

@@ -26,6 +26,23 @@ pipeline {
             }
         }
 
+        stage('Init NPM') {
+            steps {
+                script {
+                    // Clean up older backups
+                    sh 'rm -f package.json_backup'
+
+                    if (fileExists('package.json')) {
+                        sh 'cp package.json package.json_backup'
+                        echo "📝 Existing package.json backed up as package.json_backup"
+                    }
+
+                    sh 'npm init -y'
+                    echo "📦 npm project initialized"
+                }
+            }
+        }
+
         stage('OWASP Dependency Check') {
             steps {
                 dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DC'
