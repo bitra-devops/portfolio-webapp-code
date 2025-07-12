@@ -1,6 +1,6 @@
 # 🎨 Portfolio WebApp - Personal Website
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=santosh-bitra_portfolio-webapp-code\&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=santosh-bitra_portfolio-webapp-code)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bitra-devops_portfolio-webapp-code&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bitra-devops_portfolio-webapp-code)
 
 > 🚀 A fully responsive, cleanly structured **portfolio website** to showcase skills, projects, resume, and social presence. Built with HTML, CSS, and JavaScript, and deployed using GitHub Actions.
 
@@ -105,9 +105,9 @@ jobs:
 
 ### 📈 SonarCloud Dashboard
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=santosh-bitra_portfolio-webapp-code\&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=santosh-bitra_portfolio-webapp-code)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=bitra-devops_portfolio-webapp-code)](https://sonarcloud.io/summary/new_code?id=bitra-devops_portfolio-webapp-code)
 
-🔗 [Click here to view full SonarCloud analysis](https://sonarcloud.io/summary/new_code?id=santosh-bitra_portfolio-webapp-code)
+🔗 [Click here to view full SonarCloud analysis](https://sonarcloud.io/summary/new_code?id=bitra-devops_portfolio-webapp-code)
 
 ---
 
@@ -147,4 +147,4 @@ This project can be deployed easily on platforms like:
 
 ## 👨‍💻 Made by Santosh Bitra
 
-DevOps | AWS | Terraform | GitHub Actions | SonarCloud | JavaScript | HTML/CSS
+DevOps | AWS | Terraform | GitHub Actions | SonarCloud | Kubernetes | Python
