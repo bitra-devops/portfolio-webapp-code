@@ -13,6 +13,7 @@ jobs:
 
     env:
       DOCKER_IMAGE: ${{ secrets.Docker_Image }}
+      JAVA_VERSION: ${{ vars.Java_Version}}
 #      DOCKER_IMAGE: santoshbitradocker/my-portfolio-landingpage
 
     steps:
@@ -25,7 +26,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: ${{ vars.Java_Version}} #'17'
 
       - name: Set up Maven
         uses: stCarolas/setup-maven@v4
