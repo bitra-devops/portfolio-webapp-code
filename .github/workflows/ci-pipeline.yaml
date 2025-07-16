@@ -12,8 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCKER_IMAGE: ${{ secrets.Docker_Image }}
-      JAVA_VERSION: ${{ vars.Java_Version}}
+      DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      SONARCLOUDTOKEN: ${{ secrets.SONARCLOUDTOKEN }}
+      JAVA_VERSION: ${{ vars.JAVA_VERSION}}
 #      DOCKER_IMAGE: santoshbitradocker/my-portfolio-landingpage
 
     steps:
@@ -26,7 +29,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: ${{ vars.Java_Version}} #'17'
+          java-version: ${{ env.Java_Version}} #'17'
 
       - name: Set up Maven
         uses: stCarolas/setup-maven@v4
@@ -70,10 +73,10 @@ jobs:
             -Dsonar.sources=.
             -Dsonar.java.binaries=.
         env:
-          SONAR_TOKEN: ${{ secrets.SONARCLOUDTOKEN }}
+          SONAR_TOKEN: ${{ env.SONARCLOUDTOKEN }}
 
       - name: DockerHub Login
-        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        run: echo "${{ env.DOCKERHUB_PASSWORD }}" | docker login -u "${{ env.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker Image
         run: |
